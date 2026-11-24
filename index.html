@@ -6,7 +6,7 @@
 <title>100% Ramonté — Plateforme de jeu</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#111f4a;--navy2:#34406a;--cy:#5fe0ff;--bl:#1478ff;--gr:#35c93a;--rd:#e8433f;--gold:#ffd23f;--bg:#f3f5fa;--ink:#111f4a}
+:root{--navy:#0d3b1c;--navy2:#2d6a3e;--gl:#d4a82a;--cy:#5fe0ff;--bl:#1478ff;--gr:#35c93a;--rd:#e8433f;--gold:#ffd23f;--bg:#f2f6f2;--ink:#0d3b1c}
 body{font-family:Inter,"Trebuchet MS",Verdana,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
 button{font:inherit;cursor:pointer}
 /* barre du haut */
@@ -20,14 +20,17 @@ button{font:inherit;cursor:pointer}
 /* tiroir */
 .back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:30;opacity:0;pointer-events:none;transition:.2s}
 .back.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;bottom:0;left:0;width:78%;max-width:320px;background:var(--navy);color:#fff;z-index:31;transform:translateX(-102%);transition:.22s;padding:18px 14px;overflow-y:auto}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:82%;max-width:330px;background:linear-gradient(180deg,#0f4a24,#0a2e15);color:#fff;z-index:31;transform:translateX(-102%);transition:.22s;padding:16px 12px 0;overflow-y:auto;display:flex;flex-direction:column}
 .drawer.on{transform:none}
-.drawer .hd{display:flex;align-items:center;justify-content:space-between;padding:6px 6px 22px}
-.drawer .hd b{font-size:21px;letter-spacing:.5px}
+.drawer .hd{display:flex;align-items:center;gap:12px;padding:2px 4px 18px}
+.drawer .hd b{flex:1;font-family:Georgia,"Times New Roman",serif;font-size:22px;letter-spacing:.3px}
 .drawer .hd button{background:none;border:0;color:#fff;font-size:26px}
-.drawer .it{display:flex;align-items:center;gap:16px;width:100%;border:0;background:none;color:#fff;text-align:left;padding:15px 14px;border-radius:12px;font-size:17px;margin-bottom:2px}
-.drawer .it.on{background:var(--navy2)}
-.drawer .it i{font-style:normal;width:26px;text-align:center;font-size:20px}
+.drawer .logo{width:58px;height:58px;flex:0 0 58px;border-radius:50%;border:3px solid var(--gl);background:#fff center/cover no-repeat;display:grid;place-items:center;font-size:26px}
+.drawer .it{display:flex;align-items:center;gap:16px;width:100%;border:1px solid transparent;background:none;color:#fff;text-align:left;padding:14px 14px;border-radius:14px;font-size:17px;margin-bottom:4px}
+.drawer .it.on{background:var(--navy2);border-color:#b8963a}
+.drawer .it i{font-style:normal;width:28px;text-align:center;font-size:21px}
+.drawer .deco{margin:auto -12px 0;padding-top:16px;line-height:0}
+.drawer .deco svg{width:100%;height:auto}
 main{max-width:960px;margin:0 auto;padding:14px 12px 60px}
 /* cartes admin */
 .card{background:#fff;border:1px solid #e3e7f1;border-radius:14px;padding:14px;margin-bottom:12px}
@@ -352,7 +355,10 @@ const VIEWS={dash:vDash,cands:vCands,tirage:vTirage,match:vMatch,classement:vCla
 function render(){
   const act=document.activeElement&&document.activeElement.id;
   const keep={};["srch","newc","ec","fq","fa","fb","fc","bulk","pin","npin"].forEach(k=>{const e=$(k);if(e)keep[k]=e.value;});
-  $("drawer").innerHTML=`<div class="hd"><b>SUNU SECTION</b><button data-act="menu">✕</button></div>`.replace("SUNU SECTION","100% RAMONTÉ")+MENU.map(m=>`<button class="it ${UI.tab===m[0]?"on":""}" data-go="${m[0]}"><i>${m[1]}</i>${m[2]}</button>`).join("");
+  const nmApp=CFG.APP_NAME||"Jardin du Khilass";
+  $("drawer").innerHTML=`<div class="hd"><div class="logo" ${CFG.LOGO_URL?`style="background-image:url('${esc(CFG.LOGO_URL)}')"`:""}>${CFG.LOGO_URL?"":"🌙"}</div><b>${esc(nmApp)}</b><button data-act="menu">✕</button></div>`+MENU.map(m=>`<button class="it ${UI.tab===m[0]?"on":""}" data-go="${m[0]}"><i>${m[1]}</i>${m[2]}</button>`).join("")+`<div class="deco"><svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0cf63"/><stop offset="1" stop-color="#b8861f"/></linearGradient></defs>
+<g fill="url(#gg)"><path d="M105 86Q105 46 150 40Q195 46 195 86Z"/><path d="M80 86Q80 66 98 62Q116 66 116 86Z"/><path d="M184 86Q184 66 202 62Q220 66 220 86Z"/><rect x="60" y="44" width="10" height="42"/><path d="M58 44L65 30L72 44Z"/><rect x="230" y="44" width="10" height="42"/><path d="M228 44L235 30L242 44Z"/><circle cx="150" cy="26" r="9"/></g><circle cx="154" cy="24" r="8" fill="#0d3b1c"/>
+<path d="M0 88C70 62 150 108 300 66" stroke="#d4a82a" stroke-width="3" fill="none"/><path d="M0 98C70 72 150 118 300 76L300 120L0 120Z" fill="#d4a82a" opacity=".25"/></svg></div>`;
   $("drawer").classList.toggle("on",UI.menu);$("back").classList.toggle("on",UI.menu);
   $("ttl").textContent=(MENU.find(m=>m[0]===UI.tab)||[])[2]||"";
   $("who").innerHTML=`<span class="dot ${conn==="live"?"on":conn==="ro"?"off":""}"></span>${A()?"Administrateur":"Spectateur"}`;
